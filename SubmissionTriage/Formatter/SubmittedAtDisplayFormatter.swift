@@ -15,8 +15,7 @@ enum SubmittedAtDisplayFormatter {
 
     private static let dateTimeFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
+        formatter.dateFormat = "h:mm a, MMM d, yyyy"
         return formatter
     }()
 

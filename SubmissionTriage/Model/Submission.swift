@@ -5,7 +5,7 @@
 
 import Foundation
 
-struct Submission: Codable, Identifiable {
+struct Submission: Codable, Identifiable, Hashable {
     let id: Int?
     let name: String?
     let email: String?
@@ -16,6 +16,14 @@ struct Submission: Codable, Identifiable {
     let submittedAt: ParsedDate?
     let formVersion: String?
     let internalNotes: String?
+
+    var displayName: String? {
+        guard let name else { return nil }
+        let trimmed = name
+            .split(separator: " ", omittingEmptySubsequences: true)
+            .joined(separator: " ")
+        return trimmed.isEmpty ? nil : trimmed
+    }
 
     enum CodingKeys: String, CodingKey {
         case id, name, email, phone, service, status, message, submittedAt, formVersion, internalNotes

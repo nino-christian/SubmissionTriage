@@ -3,9 +3,9 @@
 //  SubmissionTriage
 //
 
-import Foundation
+import SwiftUI
 
-enum SubmissionStatus: Codable, Equatable {
+enum SubmissionStatus: Codable, Hashable {
     case new
     case open
     case pending
@@ -30,6 +30,30 @@ enum SubmissionStatus: Codable, Equatable {
         case "reviewed": self = .reviewed
         case "closed": self = .closed
         default: self = .unknown(rawValue)
+        }
+    }
+
+    var displayText: String {
+        switch self {
+        case .new: "New"
+        case .open: "Open"
+        case .pending: "Pending"
+        case .inReview: "In Review"
+        case .reviewed: "Reviewed"
+        case .closed: "Closed"
+        case .unknown(let raw): raw.capitalized
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .new: .blue
+        case .open: .green
+        case .pending: .orange
+        case .inReview: .purple
+        case .reviewed: .teal
+        case .closed: .gray
+        case .unknown: .secondary
         }
     }
 }

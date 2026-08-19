@@ -5,7 +5,7 @@
 
 import Foundation
 
-struct ParsedDate: Codable {
+struct ParsedDate: Codable, Hashable {
     let date: Date
     let hasTimeComponent: Bool
 }

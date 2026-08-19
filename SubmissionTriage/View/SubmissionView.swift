@@ -9,19 +9,34 @@ import SwiftUI
 
 struct SubmissionView<ViewModel: SubmissionViewModelProtocol>: View {
     @Bindable private var viewModel: ViewModel
+    @State private var router = Router()
 
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
 
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack(path: $router.path) {
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(viewModel.filteredSubmissions) { submission in
+                        SubmissionRowView(submission: submission) {
+                            router.push(.submissionDetail(submission))
+                        }
+                        Divider()
+                    }
+                }
+            }
+            .searchable(text: $viewModel.searchText)
+            .navigationTitle("Submission")
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .submissionDetail(let submission):
+                    SubmissionDetailView(submission: submission)
+                }
+            }
         }
-        .padding()
+        .environment(router)
         .task {
             await viewModel.loadSubmissions()
         }
