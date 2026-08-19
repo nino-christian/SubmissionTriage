@@ -9,7 +9,11 @@ enum APIClientError: Error {
     case fileNotFound(String)
 }
 
-struct APIClient {
+protocol APIClientProtocol {
+    func fetchSubmissions() throws -> [Submission]
+}
+
+struct APIClient: APIClientProtocol {
     func fetchSubmissions() throws -> [Submission] {
         guard let url = Bundle.main.url(forResource: "submissions", withExtension: "json") else {
             throw APIClientError.fileNotFound("submissions.json")
