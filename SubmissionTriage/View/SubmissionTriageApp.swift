@@ -11,7 +11,7 @@ import SwiftUI
 struct SubmissionTriageApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SubmissionView()
         }
     }
 }

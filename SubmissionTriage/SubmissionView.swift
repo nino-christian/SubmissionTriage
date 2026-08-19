@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  SubmissionView.swift
 //  SubmissionTriage
 //
 //  Created by Niño Christian on 8/19/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct SubmissionView: View {
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -20,5 +20,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    SubmissionView()
 }
