@@ -15,7 +15,7 @@ The search feature solves the user problem of looking up into records one by one
  
 ### Developer perspective
 How do you plan to implement it? 
-Create one screen to display the submission records and have the search feat inside it. And another screen for details  
+Create one screen to display the submission records and have the search feat inside it. And another screen for details. Use UserDefaults for tracking seen/unseen status  
 
 Why is this approach reasonable for the timebox?
 A simple screen to render records and a lookup search bar inside it is reasonable for the current timebox. UI / UX are not specified, it is assumed to be simple which is another reason that it suits the timebox provided.
@@ -133,9 +133,9 @@ I would create the seen/read tracking manager
 ## 7. Risks, Trade-offs, and Follow-up
  
 List important risks, shortcuts, or trade-offs. Also answer:
-- What did you intentionally skip? Fetch data via text search, pagination, highlight on search, search via multiple field, sorting
-- What would you improve with more time? fetch data via text search, pagination, hightlight on search, saerch via email as well, sorting, and ui fixes
-- What would you ask the client before building this for production? 
+- What did you intentionally skip? highlight on search, search via multiple field (name, email, etc), sorting
+- What would you improve with more time? hightlight on search, saerch via email as well (name, email, etc), sorting, and ui fixes
+- What would you ask the client before building this for production? Tap email addresses to compose email. Editing. 
 - If you used AI tools, how did you use them and how did you validate output? I use them to type for me. I validate their inputs according to what was required and how it should be created i.e patterns, variable names, method names, file segregation, class names. This are important to me so that the code itself is self documenting. 
  
 ---
