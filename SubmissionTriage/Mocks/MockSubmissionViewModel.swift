@@ -6,6 +6,7 @@
 import Foundation
 import Observation
 
+@MainActor
 @Observable
 final class MockSubmissionViewModel: SubmissionViewModelProtocol {
     var submissions: [Submission]

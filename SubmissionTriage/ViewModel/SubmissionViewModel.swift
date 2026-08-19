@@ -6,6 +6,7 @@
 import Foundation
 import Observation
 
+@MainActor
 protocol SubmissionViewModelProtocol: AnyObject, Observable {
     var submissions: [Submission] { get }
     var filteredSubmissions: [Submission] { get }
@@ -15,6 +16,7 @@ protocol SubmissionViewModelProtocol: AnyObject, Observable {
     func loadSubmissions() async
 }
 
+@MainActor
 @Observable
 final class SubmissionViewModel: SubmissionViewModelProtocol {
     private let service: SubmissionServiceProtocol

@@ -6,6 +6,7 @@
 import XCTest
 @testable import SubmissionTriage
 
+@MainActor
 final class SubmissionViewModelTests: XCTestCase {
 
     private func makeSUT() -> (sut: SubmissionViewModel, mockService: MockSubmissionService) {
@@ -14,22 +15,22 @@ final class SubmissionViewModelTests: XCTestCase {
         return (sut, mockService)
     }
 
-    func testLoadSubmissions_whenServiceThrows_setsErrorMessage() {
+    func testLoadSubmissions_whenServiceThrows_setsErrorMessage() async {
         let (sut, mockService) = makeSUT()
         mockService.stubbedError = APIClientError.fileNotFound("submissions.json")
 
-        sut.loadSubmissions()
+        await sut.loadSubmissions()
 
         XCTAssertNotNil(sut.errorMessage)
         XCTAssertTrue(sut.submissions.isEmpty)
         XCTAssertFalse(sut.isLoading)
     }
 
-    func testLoadSubmissions_whenServiceSucceeds_setsSubmissions() {
+    func testLoadSubmissions_whenServiceSucceeds_setsSubmissions() async {
         let (sut, mockService) = makeSUT()
         mockService.stubbedSubmissions = Submission.stubList
 
-        sut.loadSubmissions()
+        await sut.loadSubmissions()
 
         XCTAssertEqual(sut.submissions.count, Submission.stubList.count)
         XCTAssertNil(sut.errorMessage)
