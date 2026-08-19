@@ -11,7 +11,7 @@ struct Submission: Codable, Identifiable {
     let email: String?
     let phone: String?
     let service: String?
-    let status: String?
+    let status: SubmissionStatus?
     let message: String?
     let submittedAt: ParsedDate?
     let formVersion: String?
@@ -27,7 +27,7 @@ struct Submission: Codable, Identifiable {
         email: String?,
         phone: String?,
         service: String?,
-        status: String?,
+        status: SubmissionStatus?,
         message: String?,
         submittedAt: ParsedDate?,
         formVersion: String?,
@@ -64,7 +64,7 @@ struct Submission: Codable, Identifiable {
             phone = nil
         }
         service = try container.decodeIfPresent(String.self, forKey: .service)
-        status = try container.decodeIfPresent(String.self, forKey: .status)
+        status = SubmissionStatus(rawValue: try container.decodeIfPresent(String.self, forKey: .status))
         message = try container.decodeIfPresent(String.self, forKey: .message)
         formVersion = try container.decodeIfPresent(String.self, forKey: .formVersion)
         internalNotes = try container.decodeIfPresent(String.self, forKey: .internalNotes)
