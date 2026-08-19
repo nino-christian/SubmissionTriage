@@ -7,7 +7,13 @@
 
 import SwiftUI
 
-struct SubmissionView: View {
+struct SubmissionView<ViewModel: SubmissionViewModelProtocol>: View {
+    @Bindable private var viewModel: ViewModel
+
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+    }
+
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -20,5 +26,5 @@ struct SubmissionView: View {
 }
 
 #Preview {
-    SubmissionView()
+    SubmissionView(viewModel: MockSubmissionViewModel())
 }
