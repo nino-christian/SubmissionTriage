@@ -7,13 +7,29 @@ import SwiftUI
 
 struct SubmissionDetailView: View {
     let submission: Submission
+    let isSeen: () -> Bool
+    let markSeen: () -> Void
+
+    @State private var wasSeenOnAppear = true
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(submission.displayName ?? "Unknown")
-                        .font(.title2.bold())
+                    HStack(spacing: 8) {
+                        Text(submission.displayName ?? "Unknown")
+                            .font(.title2.bold())
+                        if !wasSeenOnAppear {
+                            Text("New")
+                                .font(.caption2.bold())
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(
+                                    Capsule().fill(Color.accentColor)
+                                )
+                        }
+                    }
                     Text(SubmittedAtDisplayFormatter.string(from: submission.submittedAt) ?? "—")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -44,6 +60,10 @@ struct SubmissionDetailView: View {
         }
         .navigationTitle("Submission Detail")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            wasSeenOnAppear = isSeen()
+            markSeen()
+        }
     }
 
     @ViewBuilder
@@ -60,6 +80,6 @@ struct SubmissionDetailView: View {
 
 #Preview {
     NavigationStack {
-        SubmissionDetailView(submission: .stub)
+        SubmissionDetailView(submission: .stub, isSeen: { false }, markSeen: {})
     }
 }

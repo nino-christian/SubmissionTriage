@@ -13,6 +13,7 @@ final class MockSubmissionViewModel: SubmissionViewModelProtocol {
     var searchText: String = ""
     var isLoading: Bool = false
     var errorMessage: String?
+    private var seenIds: Set<Int> = []
 
     var filteredSubmissions: [Submission] {
         guard !searchText.isEmpty else { return submissions }
@@ -27,4 +28,14 @@ final class MockSubmissionViewModel: SubmissionViewModelProtocol {
     }
 
     func loadSubmissions() {}
+
+    func isSeen(_ submission: Submission) -> Bool {
+        guard let submissionId = submission.submissionId else { return false }
+        return seenIds.contains(submissionId)
+    }
+
+    func markSeen(_ submission: Submission) {
+        guard let submissionId = submission.submissionId else { return }
+        seenIds.insert(submissionId)
+    }
 }

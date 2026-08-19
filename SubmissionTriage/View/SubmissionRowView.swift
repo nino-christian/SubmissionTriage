@@ -7,6 +7,7 @@ import SwiftUI
 
 struct SubmissionRowView: View {
     let submission: Submission
+    let isSeen: Bool
     let onTap: () -> Void
 
     var body: some View {
@@ -15,6 +16,8 @@ struct SubmissionRowView: View {
                 HStack {
                     Text(submission.displayName ?? "Unknown")
                         .font(.headline)
+                        .fontWeight(isSeen ? .semibold : .bold)
+                        .foregroundStyle(isSeen ? .gray : .primary)
                     Spacer()
                     Text(SubmittedAtDisplayFormatter.string(from: submission.submittedAt) ?? "—")
                         .font(.caption)
@@ -34,6 +37,7 @@ struct SubmissionRowView: View {
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
                                 .fill(submission.status?.color ?? .secondary)
                         )
+                        .opacity(isSeen ? 0.6 : 1)
                 }
             }
             .padding(.vertical, 8)
@@ -47,6 +51,6 @@ struct SubmissionRowView: View {
 
 #Preview {
     List(Submission.stubList) { submission in
-        SubmissionRowView(submission: submission, onTap: {})
+        SubmissionRowView(submission: submission, isSeen: false, onTap: {})
     }
 }

@@ -14,17 +14,21 @@ protocol SubmissionViewModelProtocol: AnyObject, Observable {
     var isLoading: Bool { get }
     var errorMessage: String? { get }
     func loadSubmissions() async
+    func isSeen(_ submission: Submission) -> Bool
+    func markSeen(_ submission: Submission)
 }
 
 @MainActor
 @Observable
 final class SubmissionViewModel: SubmissionViewModelProtocol {
     private let service: SubmissionServiceProtocol
+    private let seenSubmissionsManager: SeenSubmissionsManagerProtocol
 
     var submissions: [Submission] = []
     var searchText: String = ""
     var isLoading: Bool = true
     var errorMessage: String?
+    private var seenIds: Set<Int>
 
     var filteredSubmissions: [Submission] {
         guard !searchText.isEmpty else { return submissions }
@@ -34,8 +38,24 @@ final class SubmissionViewModel: SubmissionViewModelProtocol {
         }
     }
 
-    init(service: SubmissionServiceProtocol) {
+    init(
+        service: SubmissionServiceProtocol,
+        seenSubmissionsManager: SeenSubmissionsManagerProtocol
+    ) {
         self.service = service
+        self.seenSubmissionsManager = seenSubmissionsManager
+        self.seenIds = seenSubmissionsManager.seenIds()
+    }
+
+    func isSeen(_ submission: Submission) -> Bool {
+        guard let submissionId = submission.submissionId else { return false }
+        return seenIds.contains(submissionId)
+    }
+
+    func markSeen(_ submission: Submission) {
+        guard let submissionId = submission.submissionId else { return }
+        seenSubmissionsManager.markSeen(submissionId)
+        seenIds.insert(submissionId)
     }
 
     func loadSubmissions() async {

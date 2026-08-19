@@ -23,7 +23,11 @@ struct SubmissionView<ViewModel: SubmissionViewModelProtocol>: View {
                 .navigationDestination(for: Route.self) { route in
                     switch route {
                     case .submissionDetail(let submission):
-                        SubmissionDetailView(submission: submission)
+                        SubmissionDetailView(
+                            submission: submission,
+                            isSeen: { viewModel.isSeen(submission) },
+                            markSeen: { viewModel.markSeen(submission) }
+                        )
                     }
                 }
         }
@@ -79,7 +83,7 @@ extension SubmissionView {
         } else {
             LazyVStack(spacing: 0) {
                 ForEach(viewModel.filteredSubmissions) { submission in
-                    SubmissionRowView(submission: submission) {
+                    SubmissionRowView(submission: submission, isSeen: viewModel.isSeen(submission)) {
                         router.push(.submissionDetail(submission))
                     }
                     Divider()

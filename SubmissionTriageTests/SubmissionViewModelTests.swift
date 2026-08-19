@@ -11,7 +11,11 @@ final class SubmissionViewModelTests: XCTestCase {
 
     private func makeSUT() -> (sut: SubmissionViewModel, mockService: MockSubmissionService) {
         let mockService = MockSubmissionService()
-        let sut = SubmissionViewModel(service: mockService)
+        let seenManager = MockSeenSubmissionsManager()
+        let sut = SubmissionViewModel(
+            service: mockService,
+            seenSubmissionsManager: seenManager
+        )
         return (sut, mockService)
     }
 

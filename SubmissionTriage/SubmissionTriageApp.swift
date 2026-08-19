@@ -11,12 +11,17 @@ import SwiftUI
 struct SubmissionTriageApp: App {
     private let apiClient: APIClient
     private let submissionService: SubmissionService
+    private let seenSubmissionsManager: SeenSubmissionsManager
     private let submissionViewModel: SubmissionViewModel
 
     init() {
         apiClient = APIClient()
         submissionService = SubmissionService(apiClient: apiClient)
-        submissionViewModel = SubmissionViewModel(service: submissionService)
+        seenSubmissionsManager = SeenSubmissionsManager()
+        submissionViewModel = SubmissionViewModel(
+            service: submissionService,
+            seenSubmissionsManager: seenSubmissionsManager
+        )
     }
 
     var body: some Scene {
