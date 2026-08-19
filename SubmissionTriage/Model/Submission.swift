@@ -6,7 +6,8 @@
 import Foundation
 
 struct Submission: Codable, Identifiable, Hashable {
-    let id: Int?
+    let id = UUID()
+    let submissionId: Int?
     let name: String?
     let email: String?
     let phone: String?
@@ -26,7 +27,8 @@ struct Submission: Codable, Identifiable, Hashable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case id, name, email, phone, service, status, message, submittedAt, formVersion, internalNotes
+        case submissionId = "id"
+        case name, email, phone, service, status, message, submittedAt, formVersion, internalNotes
     }
 
     init(
@@ -41,7 +43,7 @@ struct Submission: Codable, Identifiable, Hashable {
         formVersion: String?,
         internalNotes: String?
     ) {
-        self.id = id
+        self.submissionId = id
         self.name = name
         self.email = email
         self.phone = phone
@@ -55,12 +57,12 @@ struct Submission: Codable, Identifiable, Hashable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        if let rawIdInt = try? container.decodeIfPresent(Int.self, forKey: .id) {
-            id = rawIdInt
-        } else if let rawIdString = try? container.decodeIfPresent(String.self, forKey: .id) {
-            id = Int(rawIdString)
+        if let rawIdInt = try? container.decodeIfPresent(Int.self, forKey: .submissionId) {
+            submissionId = rawIdInt
+        } else if let rawIdString = try? container.decodeIfPresent(String.self, forKey: .submissionId) {
+            submissionId = Int(rawIdString)
         } else {
-            id = nil
+            submissionId = nil
         }
         name = try container.decodeIfPresent(String.self, forKey: .name)
         email = try container.decodeIfPresent(String.self, forKey: .email)

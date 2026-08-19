@@ -23,7 +23,7 @@ final class SubmissionViewModel: SubmissionViewModelProtocol {
 
     var submissions: [Submission] = []
     var searchText: String = ""
-    var isLoading: Bool = false
+    var isLoading: Bool = true
     var errorMessage: String?
 
     var filteredSubmissions: [Submission] {
@@ -39,16 +39,27 @@ final class SubmissionViewModel: SubmissionViewModelProtocol {
     }
 
     func loadSubmissions() async {
-        try? await Task.sleep(nanoseconds: 200_000_000)
-        
+        try? await Task.sleep(nanoseconds: 700_000_000)
+
         isLoading = true
+        defer { isLoading = false }
+
         errorMessage = nil
         do {
+            guard Double.random(in: 0...1) > 0.2 else {
+                throw SubmissionLoadError.random
+            }
             submissions = try service.getSubmissions()
-            print("\(submissions)")
         } catch {
             errorMessage = error.localizedDescription
         }
-        isLoading = false
+    }
+}
+
+enum SubmissionLoadError: LocalizedError {
+    case random
+
+    var errorDescription: String? {
+        "Failed to load submissions. Please try again."
     }
 }
