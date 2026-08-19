@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct SubmissionTriageApp: App {
+    
+    
     var body: some Scene {
         WindowGroup {
             SubmissionView()
