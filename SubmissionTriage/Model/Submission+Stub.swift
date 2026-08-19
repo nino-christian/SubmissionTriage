@@ -14,7 +14,7 @@ extension Submission {
         service: "Web Development",
         status: "new",
         message: "We need a marketing site refresh before Q3.",
-        submittedAt: "2024-11-03T14:22:00Z",
+        submittedAt: FlexibleDateFormatter.parse("2024-11-03T14:22:00Z"),
         formVersion: "v3",
         internalNotes: nil
     )
@@ -42,7 +42,7 @@ extension Submission {
             service: "mobile",
             status: "Open",
             message: "iOS app for our delivery riders. Android maybe later.",
-            submittedAt: "2024/10/28",
+            submittedAt: FlexibleDateFormatter.parse("2024/10/28"),
             formVersion: "v2",
             internalNotes: nil
         ),
@@ -54,7 +54,7 @@ extension Submission {
             service: "Mobile App Development",
             status: "Pending",
             message: "Healthcare appointment app. Privacy is important to us.",
-            submittedAt: "2024-11-05T13:30:00Z",
+            submittedAt: FlexibleDateFormatter.parse("2024-11-05T13:30:00Z"),
             formVersion: "v3",
             internalNotes: nil
         ),

@@ -22,6 +22,9 @@ struct SubmissionView<ViewModel: SubmissionViewModelProtocol>: View {
             Text("Hello, world!")
         }
         .padding()
+        .task {
+            await viewModel.loadSubmissions()
+        }
     }
 }
 

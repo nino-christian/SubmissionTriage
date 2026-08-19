@@ -12,7 +12,7 @@ protocol SubmissionViewModelProtocol: AnyObject, Observable {
     var searchText: String { get set }
     var isLoading: Bool { get }
     var errorMessage: String? { get }
-    func loadSubmissions()
+    func loadSubmissions() async
 }
 
 @Observable
@@ -36,11 +36,14 @@ final class SubmissionViewModel: SubmissionViewModelProtocol {
         self.service = service
     }
 
-    func loadSubmissions() {
+    func loadSubmissions() async {
+        try? await Task.sleep(nanoseconds: 200_000_000)
+        
         isLoading = true
         errorMessage = nil
         do {
             submissions = try service.getSubmissions()
+            print("\(submissions)")
         } catch {
             errorMessage = error.localizedDescription
         }
