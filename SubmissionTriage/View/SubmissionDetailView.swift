@@ -28,6 +28,15 @@ struct SubmissionDetailView: View {
                                 .background(
                                     Capsule().fill(Color.accentColor)
                                 )
+                        } else {
+                            Text("Reviewed")
+                                .font(.caption2.bold())
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(
+                                    Capsule().fill(Color.gray)
+                                )
                         }
                     }
                     Text(SubmittedAtDisplayFormatter.string(from: submission.submittedAt) ?? "—")

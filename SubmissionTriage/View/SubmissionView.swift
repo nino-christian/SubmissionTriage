@@ -39,9 +39,27 @@ struct SubmissionView<ViewModel: SubmissionViewModelProtocol>: View {
 }
 
 extension SubmissionView {
+    private enum DisplayState: Equatable {
+        case error(String)
+        case empty
+        case noResults
+        case list
+    }
+
+    private var displayState: DisplayState {
+        if let errorMessage = viewModel.errorMessage {
+            return .error(errorMessage)
+        } else if viewModel.filteredSubmissions.isEmpty {
+            let isSearching = !viewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            return isSearching ? .noResults : .empty
+        } else {
+            return .list
+        }
+    }
+
     @ViewBuilder
     private var content: some View {
-        if viewModel.isLoading && viewModel.submissions.isEmpty {
+        if viewModel.isLoading && !viewModel.hasLoadedOnce {
             ProgressView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .transition(.opacity)
@@ -49,8 +67,7 @@ extension SubmissionView {
             ScrollView {
                 stateBody
                     .frame(maxWidth: .infinity)
-                    .animation(.default, value: viewModel.errorMessage)
-                    .animation(.default, value: viewModel.filteredSubmissions)
+                    .animation(.default, value: displayState)
                     .transition(.opacity)
             }
             .refreshable {
@@ -61,26 +78,25 @@ extension SubmissionView {
 
     @ViewBuilder
     private var stateBody: some View {
-        if let errorMessage = viewModel.errorMessage {
+        switch displayState {
+        case .error(let errorMessage):
             ContentUnavailableView(
                 "Something Went Wrong",
                 systemImage: "exclamationmark.triangle",
                 description: Text(errorMessage)
             )
             .frame(minHeight: 400)
-        } else if viewModel.filteredSubmissions.isEmpty {
-            if viewModel.searchText.isEmpty {
-                ContentUnavailableView(
-                    "No Submissions",
-                    systemImage: "tray",
-                    description: Text("Submissions will appear here once received.")
-                )
+        case .empty:
+            ContentUnavailableView(
+                "No Submissions",
+                systemImage: "tray",
+                description: Text("Submissions will appear here once received.")
+            )
+            .frame(minHeight: 400)
+        case .noResults:
+            ContentUnavailableView.search(text: viewModel.searchText)
                 .frame(minHeight: 400)
-            } else {
-                ContentUnavailableView.search(text: viewModel.searchText)
-                    .frame(minHeight: 400)
-            }
-        } else {
+        case .list:
             LazyVStack(spacing: 0) {
                 ForEach(viewModel.filteredSubmissions) { submission in
                     SubmissionRowView(submission: submission, isSeen: viewModel.isSeen(submission)) {

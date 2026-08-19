@@ -12,6 +12,7 @@ protocol SubmissionViewModelProtocol: AnyObject, Observable {
     var filteredSubmissions: [Submission] { get }
     var searchText: String { get set }
     var isLoading: Bool { get }
+    var hasLoadedOnce: Bool { get }
     var errorMessage: String? { get }
     func loadSubmissions() async
     func isSeen(_ submission: Submission) -> Bool
@@ -27,14 +28,16 @@ final class SubmissionViewModel: SubmissionViewModelProtocol {
     var submissions: [Submission] = []
     var searchText: String = ""
     var isLoading: Bool = true
+    var hasLoadedOnce: Bool = false
     var errorMessage: String?
     private var seenIds: Set<Int>
 
     var filteredSubmissions: [Submission] {
-        guard !searchText.isEmpty else { return submissions }
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !query.isEmpty else { return submissions }
         return submissions.filter {
-            ($0.name?.localizedCaseInsensitiveContains(searchText) ?? false) ||
-            ($0.email?.localizedCaseInsensitiveContains(searchText) ?? false)
+            ($0.name?.localizedCaseInsensitiveContains(query) ?? false) ||
+            ($0.email?.localizedCaseInsensitiveContains(query) ?? false)
         }
     }
 
@@ -62,11 +65,14 @@ final class SubmissionViewModel: SubmissionViewModelProtocol {
         try? await Task.sleep(nanoseconds: 700_000_000)
 
         isLoading = true
-        defer { isLoading = false }
+        defer {
+            isLoading = false
+            hasLoadedOnce = true
+        }
 
         errorMessage = nil
         do {
-            guard Double.random(in: 0...1) > 0.2 else {
+            guard Double.random(in: 0...1) > 0.5 else {
                 throw SubmissionLoadError.random
             }
             submissions = try service.getSubmissions()

@@ -12,14 +12,16 @@ final class MockSubmissionViewModel: SubmissionViewModelProtocol {
     var submissions: [Submission]
     var searchText: String = ""
     var isLoading: Bool = false
+    var hasLoadedOnce: Bool = true
     var errorMessage: String?
     private var seenIds: Set<Int> = []
 
     var filteredSubmissions: [Submission] {
-        guard !searchText.isEmpty else { return submissions }
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !query.isEmpty else { return submissions }
         return submissions.filter {
-            ($0.name?.localizedCaseInsensitiveContains(searchText) ?? false) ||
-            ($0.email?.localizedCaseInsensitiveContains(searchText) ?? false)
+            ($0.name?.localizedCaseInsensitiveContains(query) ?? false) ||
+            ($0.email?.localizedCaseInsensitiveContains(query) ?? false)
         }
     }
 
